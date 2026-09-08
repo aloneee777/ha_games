@@ -3,98 +3,62 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>H-A Game</title>
+  <title>H-A Gaming Hub</title>
   <style>
     body {
-      background-color: #121212;
+      background-color: #0f0f1a;
       color: white;
-      font-family: sans-serif;
+      font-family: Arial, sans-serif;
       text-align: center;
       margin: 0;
       padding: 20px;
     }
-    h1 { color: #00d2ff; }
-    #board {
+    h1 { color: #00d2ff; margin-bottom: 5px; }
+    p { color: #aaa; margin-bottom: 25px; }
+    .grid {
       display: grid;
-      grid-template-columns: repeat(3, 90px);
-      grid-template-rows: repeat(3, 90px);
-      gap: 10px;
-      justify-content: center;
-      margin: 20px auto;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+      max-width: 400px;
+      margin: 0 auto;
     }
-    .cell {
+    .card {
       background: #1e1e2f;
-      border-radius: 12px;
-      font-size: 2.5rem;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      padding: 20px 10px;
+      border-radius: 15px;
+      border: 1px solid #333;
       cursor: pointer;
-      color: #00d2ff;
-      height: 90px;
     }
-    button {
-      padding: 12px 24px;
-      background: #9d4edf;
-      border: none;
-      color: white;
-      font-size: 1rem;
-      border-radius: 8px;
-      cursor: pointer;
-      margin-top: 15px;
-    }
+    .card h3 { margin: 10px 0 0 0; font-size: 1.1rem; color: #fff; }
+    .icon { font-size: 2.5rem; }
+    .full-width { grid-column: span 2; }
   </style>
 </head>
 <body>
   <h1>H-A Gaming Hub</h1>
-  <p id="status">Навбати: X</p>
-  <div id="board">
-    <div class="cell" onclick="makeMove(this, 0)"></div>
-    <div class="cell" onclick="makeMove(this, 1)"></div>
-    <div class="cell" onclick="makeMove(this, 2)"></div>
-    <div class="cell" onclick="makeMove(this, 3)"></div>
-    <div class="cell" onclick="makeMove(this, 4)"></div>
-    <div class="cell" onclick="makeMove(this, 5)"></div>
-    <div class="cell" onclick="makeMove(this, 6)"></div>
-    <div class="cell" onclick="makeMove(this, 7)"></div>
-    <div class="cell" onclick="makeMove(this, 8)"></div>
+  <p>Бозиро интихоб кунед:</p>
+
+  <div class="grid">
+    <div class="card" onclick="alert('Snake ба наздикӣ кушода мешавад!')">
+      <div class="icon">🐍</div>
+      <h3>Snake</h3>
+    </div>
+    <div class="card" onclick="alert('Flappy Bird ба наздикӣ кушода мешавад!')">
+      <div class="icon">🐦</div>
+      <h3>Flappy Bird</h3>
+    </div>
+    <div class="card" onclick="alert('2048 ба наздикӣ кушода мешавад!')">
+      <div class="icon">🔢</div>
+      <h3>2048</h3>
+    </div>
+    <div class="card" onclick="alert('Space Shooter ба наздикӣ кушода мешавад!')">
+      <div class="icon">🚀</div>
+      <h3>Space Shooter</h3>
+    </div>
+    <div class="card full-width" onclick="alert('Tetris ба наздикӣ кушода мешавад!')">
+      <div class="icon">🧱</div>
+      <h3>Tetris</h3>
+    </div>
   </div>
-  <button onclick="resetGame()">Аз нав оғоз кардан</button>
-
-  <script>
-    let turn = 'X';
-    let state = Array(9).fill(null);
-    let active = true;
-
-    function makeMove(cell, idx) {
-      if (!state[idx] && active) {
-        state[idx] = turn;
-        cell.innerText = turn;
-        cell.style.color = turn === 'X' ? '#00d2ff' : '#ff007f';
-        if (checkWin()) {
-          document.getElementById('status').innerText = 'Ғолиб: ' + turn + '! 🎉';
-          active = false;
-        } else if (state.every(c => c)) {
-          document.getElementById('status').innerText = 'Дӯстӣ! 🤝';
-        } else {
-          turn = turn === 'X' ? 'O' : 'X';
-          document.getElementById('status').innerText = 'Навбати: ' + turn;
-        }
-      }
-    }
-
-    function checkWin() {
-      const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
-      return wins.some(w => w.every(i => state[i] === turn));
-    }
-
-    function resetGame() {
-      state.fill(null);
-      active = true;
-      turn = 'X';
-      document.getElementById('status').innerText = 'Навбати: X';
-      document.querySelectorAll('.cell').forEach(c => c.innerText = '');
-    }
-  </script>
 </body>
 </html>
