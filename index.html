@@ -3,409 +3,348 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>Cyber Nexus Hub Pro</title>
+  <title>Neon Cyber Runner Pro</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
     :root {
-      --bg-primary: #07070f;
-      --bg-card: rgba(20, 20, 35, 0.75);
-      --accent-neon: #00f0ff;
-      --accent-pink: #ff0055;
-      --accent-gold: #ffd700;
+      --bg-deep: #05050a;
+      --neon-cyan: #00f3ff;
+      --neon-pink: #ff0055;
+      --neon-yellow: #f3e600;
       --text-main: #ffffff;
-      --text-muted: #8c8cbe;
     }
 
     * { box-sizing: border-box; touch-action: manipulation; }
-    
+
     body {
-      background: radial-gradient(circle at center, #121026 0%, var(--bg-primary) 100%);
+      background: radial-gradient(circle at center, #130f26 0%, var(--bg-deep) 100%);
       color: var(--text-main);
       font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
       margin: 0;
-      padding: 16px;
+      padding: 12px;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
+      justify-content: center;
       user-select: none;
-    }
-
-    header {
-      width: 100%;
-      max-width: 400px;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 20px;
-      border-bottom: 1px solid rgba(0, 240, 255, 0.2);
-      padding-bottom: 12px;
-    }
-
-    .logo {
-      font-size: 1.2rem;
-      font-weight: 800;
-      letter-spacing: 1px;
-      color: var(--accent-neon);
-      text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
-    }
-
-    .user-stats {
-      font-size: 0.8rem;
-      background: rgba(0, 240, 255, 0.1);
-      border: 1px solid rgba(0, 240, 255, 0.3);
-      padding: 6px 12px;
-      border-radius: 20px;
-      color: var(--accent-neon);
-    }
-
-    /* HUB MENU */
-    #menu-screen {
-      width: 100%;
-      max-width: 400px;
-    }
-
-    .section-title {
-      font-size: 0.85rem;
-      text-transform: uppercase;
-      letter-spacing: 1.5px;
-      color: var(--text-muted);
-      margin-bottom: 12px;
-    }
-
-    .games-grid {
-      display: grid;
-      grid-template-columns: 1fr;
-      gap: 14px;
-    }
-
-    .game-card {
-      background: var(--bg-card);
-      backdrop-filter: blur(10px);
-      border: 1px solid rgba(255, 255, 255, 0.08);
-      border-radius: 16px;
-      padding: 16px;
-      display: flex;
-      align-items: center;
-      cursor: pointer;
-      transition: all 0.3s ease;
-      position: relative;
       overflow: hidden;
     }
 
-    .game-card::before {
-      content: '';
-      position: absolute;
-      top: 0; left: 0; width: 4px; height: 100%;
-      background: var(--accent-neon);
-      opacity: 0.6;
-    }
-
-    .game-card:nth-child(2)::before { background: var(--accent-pink); }
-    .game-card:nth-child(3)::before { background: var(--accent-gold); }
-
-    .game-card:active {
-      transform: scale(0.97);
-      border-color: var(--accent-neon);
-    }
-
-    .game-icon {
-      font-size: 2.2rem;
-      margin-right: 16px;
-      background: rgba(255,255,255,0.05);
-      width: 56px; height: 56px;
-      display: flex; align-items: center; justify-content: center;
-      border-radius: 12px;
-    }
-
-    .game-info h3 { margin: 0 0 4px 0; font-size: 1.05rem; }
-    .game-info p { margin: 0; font-size: 0.78rem; color: var(--text-muted); }
-
-    /* GAME SCREEN */
-    #game-screen {
-      display: none;
+    .game-wrapper {
       width: 100%;
-      max-width: 400px;
+      max-width: 380px;
+      background: rgba(15, 15, 30, 0.85);
+      border: 1px solid rgba(0, 243, 255, 0.2);
+      border-radius: 20px;
+      padding: 16px;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.8), 0 0 20px rgba(0, 243, 255, 0.1);
+      backdrop-filter: blur(12px);
+      display: flex;
       flex-direction: column;
       align-items: center;
     }
 
-    .game-header {
+    .header-info {
       width: 100%;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      margin-bottom: 10px;
+      margin-bottom: 12px;
     }
 
-    .btn-back {
-      background: rgba(255, 255, 255, 0.08);
-      border: 1px solid rgba(255, 255, 255, 0.2);
-      color: #fff;
-      padding: 8px 16px;
-      border-radius: 10px;
+    .title {
+      font-size: 1.1rem;
+      font-weight: 900;
+      letter-spacing: 1.5px;
+      color: var(--neon-cyan);
+      text-shadow: 0 0 10px rgba(0, 243, 255, 0.5);
+    }
+
+    .score-box {
+      background: rgba(243, 230, 0, 0.1);
+      border: 1px solid rgba(243, 230, 0, 0.3);
+      padding: 4px 10px;
+      border-radius: 12px;
       font-size: 0.85rem;
-      font-weight: 600;
-      cursor: pointer;
-    }
-
-    .score-board {
-      font-size: 0.95rem;
       font-weight: bold;
-      color: var(--accent-gold);
+      color: var(--neon-yellow);
     }
 
     canvas {
-      background: #030308;
-      border-radius: 16px;
+      background: #020205;
+      border-radius: 14px;
       border: 1px solid rgba(255, 255, 255, 0.1);
-      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      box-shadow: inset 0 0 20px rgba(0,0,0,0.9);
       width: 100%;
-      max-width: 360px;
-      height: 400px;
+      max-width: 348px;
+      height: 380px;
+      display: block;
     }
 
-    .controls {
+    .controls-grid {
       display: flex;
       gap: 12px;
-      margin-top: 16px;
+      margin-top: 14px;
       width: 100%;
-      max-width: 360px;
     }
 
-    .ctrl-btn {
+    .btn-action {
       flex: 1;
-      background: rgba(20, 20, 35, 0.9);
-      border: 1px solid var(--accent-neon);
-      color: var(--accent-neon);
+      background: linear-gradient(135deg, rgba(0, 243, 255, 0.1), rgba(0, 243, 255, 0.2));
+      border: 1px solid var(--neon-cyan);
+      color: var(--neon-cyan);
       padding: 16px;
       border-radius: 14px;
-      font-size: 1.2rem;
+      font-size: 1.3rem;
       font-weight: bold;
       cursor: pointer;
-      box-shadow: 0 4px 15px rgba(0, 240, 255, 0.15);
+      box-shadow: 0 4px 15px rgba(0, 243, 255, 0.2);
       transition: 0.1s;
     }
 
-    .ctrl-btn:active {
-      background: var(--accent-neon);
+    .btn-action:active {
+      background: var(--neon-cyan);
       color: #000;
       transform: scale(0.95);
+      box-shadow: 0 2px 8px var(--neon-cyan);
+    }
+
+    .btn-jump {
+      border-color: var(--neon-pink);
+      color: var(--neon-pink);
+      background: linear-gradient(135deg, rgba(255, 0, 85, 0.1), rgba(255, 0, 85, 0.2));
+      box-shadow: 0 4px 15px rgba(255, 0, 85, 0.2);
+    }
+
+    .btn-jump:active {
+      background: var(--neon-pink);
+      color: #fff;
+      box-shadow: 0 2px 8px var(--neon-pink);
+    }
+
+    .game-over-screen {
+      position: absolute;
+      top: 0; left: 0; width: 100%; height: 100%;
+      background: rgba(5, 5, 10, 0.92);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: 10;
+      border-radius: 20px;
+    }
+
+    .game-over-screen h2 {
+      color: var(--neon-pink);
+      font-size: 1.8rem;
+      margin-bottom: 5px;
+      text-shadow: 0 0 15px rgba(255, 0, 85, 0.6);
+    }
+
+    .btn-restart {
+      margin-top: 20px;
+      background: var(--neon-cyan);
+      color: #000;
+      border: none;
+      padding: 12px 28px;
+      border-radius: 12px;
+      font-size: 1rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 0 20px rgba(0, 243, 255, 0.4);
     }
   </style>
 </head>
 <body>
 
-  <header>
-    <div class="logo">⚡ CYBER NEXUS</div>
-    <div class="user-stats" id="total-score">Рекорд: 0</div>
-  </header>
-
-  <!-- MENU -->
-  <div id="menu-screen">
-    <div class="section-title">Интихоби бозӣ</div>
-    <div class="games-grid">
-      <div class="game-card" onclick="launchGame('neon-rider')">
-        <div class="game-icon">🏎️</div>
-        <div class="game-info">
-          <h3>Neon Rider</h3>
-          <p>Роҳи оҳани бо суръати баланд ва монеаҳо</p>
-        </div>
-      </div>
-
-      <div class="game-card" onclick="launchGame('cyber-shooter')">
-        <div class="game-icon">🚀</div>
-        <div class="game-info">
-          <h3>Cyber Shooter</h3>
-          <p>Нобудсозии душманони фазоӣ бо лазер</p>
-        </div>
-      </div>
-
-      <div class="game-card" onclick="launchGame('tap-strike')">
-        <div class="game-icon">🎯</div>
-        <div class="game-info">
-          <h3>Tap Strike</h3>
-          <p>Бозии реаксия ва ҳадафгирии босуръат</p>
-        </div>
-      </div>
+  <div class="game-wrapper" style="position: relative;">
+    <!-- Game Over Overlay -->
+    <div id="gameOverScreen" class="game-over-screen">
+      <h2>БОЗӢ ТАМОМ ШУД</h2>
+      <p id="finalScore" style="color: #fff; font-size: 1rem; margin: 0;">Холи ниҳоӣ: 0</p>
+      <button class="btn-restart" onclick="restartGame()">АЗ НАВ БОЗӢ КАРДАН</button>
     </div>
-  </div>
 
-  <!-- GAME INTERFACE -->
-  <div id="game-screen">
-    <div class="game-header">
-      <button class="btn-back" onclick="returnToMenu()">← Меню</button>
-      <div class="score-board" id="current-score">Очко: 0</div>
+    <div class="header-info">
+      <div class="title">⚡ CYBER RUNNER</div>
+      <div class="score-box" id="scoreEl">Хол: 0</div>
     </div>
-    <canvas id="gameCanvas" width="360" height="400"></canvas>
-    <div class="controls" id="control-panel"></div>
+
+    <canvas id="gameCanvas" width="348" height="380"></canvas>
+
+    <div class="controls-grid">
+      <button class="btn-action" onclick="movePlayer(-1)">◀ ЧАП</button>
+      <button class="btn-action btn-jump" onclick="jumpPlayer()">⬆️ ПАРИДАН</button>
+      <button class="btn-action" onclick="movePlayer(1)">РОСТ ▶</button>
+    </div>
   </div>
 
   <script>
     const tg = window.Telegram.WebApp;
     tg.expand();
 
-    const menuScreen = document.getElementById('menu-screen');
-    const gameScreen = document.getElementById('game-screen');
     const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
-    const scoreEl = document.getElementById('current-score');
-    const totalScoreEl = document.getElementById('total-score');
-    const controlPanel = document.getElementById('control-panel');
+    const scoreEl = document.getElementById('scoreEl');
+    const gameOverScreen = document.getElementById('gameOverScreen');
+    const finalScoreEl = document.getElementById('finalScore');
 
+    let player = { x: 154, y: 300, w: 40, h: 40, targetX: 154, vy: 0, isJumping: false };
+    let obstacles = [];
+    let particles = [];
+    let score = 0;
     let gameInterval = null;
-    let maxRecord = 0;
+    let gameSpeed = 4;
+    let isPlaying = true;
 
-    function returnToMenu() {
-      if (gameInterval) clearInterval(gameInterval);
-      gameScreen.style.display = 'none';
-      menuScreen.style.display = 'block';
-      controlPanel.innerHTML = '';
+    const lanes = [64, 154, 244];
+
+    function movePlayer(dir) {
+      if (!isPlaying) return;
+      let currentIndex = lanes.indexOf(player.targetX);
+      let newIndex = currentIndex + dir;
+      if (newIndex >= 0 && newIndex < lanes.length) {
+        player.targetX = lanes[newIndex];
+        tg.HapticFeedback.impactOccurred('light');
+      }
     }
 
-    function launchGame(type) {
-      menuScreen.style.display = 'none';
-      gameScreen.style.display = 'flex';
-      if (type === 'neon-rider') initNeonRider();
-      if (type === 'cyber-shooter') initCyberShooter();
-      if (type === 'tap-strike') initTapStrike();
+    function jumpPlayer() {
+      if (!isPlaying || player.isJumping) return;
+      player.vy = -11;
+      player.isJumping = true;
+      tg.HapticFeedback.impactOccurred('medium');
     }
 
-    // --- 1. NEON RIDER (Racing) ---
-    function initNeonRider() {
-      let carX = 160, roadOffset = 0, score = 0;
-      let obstacles = [{x: 120, y: -100, w: 40, h: 60}];
+    function spawnObstacle() {
+      let randomLane = lanes[Math.floor(Math.random() * lanes.length)];
+      let types = ['box', 'laser'];
+      let type = types[Math.floor(Math.random() * types.length)];
+      obstacles.push({ x: randomLane, y: -60, w: 40, h: 40, type: type });
+    }
 
-      controlPanel.innerHTML = `
-        <button class="ctrl-btn" onclick="carX = 90">◀ ÇАП</button>
-        <button class="ctrl-btn" onclick="carX = 230">РОСТ ▶</button>
-      `;
-
-      gameInterval = setInterval(() => {
-        score++;
-        roadOffset = (roadOffset + 6) % 40;
-        
-        ctx.fillStyle = '#07070f';
-        ctx.fillRect(0, 0, 360, 400);
-
-        // Road
-        ctx.fillStyle = '#111122';
-        ctx.fillRect(60, 0, 240, 400);
-        ctx.strokeStyle = '#00f0ff';
-        ctx.lineWidth = 2;
-        ctx.setLineDash([20, 20]);
-        ctx.lineDashOffset = -roadOffset;
-        ctx.beginPath(); ctx.moveTo(180, 0); ctx.lineTo(180, 400); ctx.stroke();
-        ctx.setLineDash([]);
-
-        // Obstacle
-        obstacles.forEach(obs => {
-          obs.y += 6;
-          if (obs.y > 400) {
-            obs.y = -80;
-            obs.x = Math.random() > 0.5 ? 90 : 230;
-          }
-          ctx.fillStyle = '#ff0055';
-          ctx.shadowBlur = 15; ctx.shadowColor = '#ff0055';
-          ctx.fillRect(obs.x, obs.y, 40, 60);
-          ctx.shadowBlur = 0;
-
-          // Collision
-          if (obs.y + 60 > 300 && obs.y < 360 && Math.abs(obs.x - carX) < 30) {
-            score = 0;
-            tg.HapticFeedback.notificationOccurred('error');
-          }
+    function createParticles(x, y, color) {
+      for (let i = 0; i < 8; i++) {
+        particles.push({
+          x: x + 20, y: y + 20,
+          vx: (Math.random() - 0.5) * 6,
+          vy: (Math.random() - 0.5) * 6,
+          life: 20,
+          color: color
         });
-
-        // Car
-        ctx.fillStyle = '#00f0ff';
-        ctx.shadowBlur = 15; ctx.shadowColor = '#00f0ff';
-        ctx.fillRect(carX - 20, 300, 40, 60);
-        ctx.shadowBlur = 0;
-
-        scoreEl.innerText = 'Масофа: ' + score;
-        if(score > maxRecord) { maxRecord = score; totalScoreEl.innerText = 'Рекорд: ' + maxRecord; }
-      }, 30);
+      }
     }
 
-    // --- 2. CYBER SHOOTER ---
-    function initCyberShooter() {
-      let shipX = 160, bullets = [], aliens = [{x: 160, y: 30}], score = 0;
+    function update() {
+      if (!isPlaying) return;
 
-      controlPanel.innerHTML = `
-        <button class="ctrl-btn" onclick="if(shipX > 40) shipX -= 30">◀</button>
-        <button class="ctrl-btn" onclick="bullets.push({x: shipX, y: 320})">🔥 ОТАШ</button>
-        <button class="ctrl-btn" onclick="if(shipX < 320) shipX += 30">▶</button>
-      `;
+      score++;
+      gameSpeed = 4 + Math.floor(score / 200);
 
-      gameInterval = setInterval(() => {
-        ctx.fillStyle = '#030308';
-        ctx.fillRect(0, 0, 360, 400);
+      player.x += (player.targetX - player.x) * 0.2;
 
-        // Bullets
-        ctx.fillStyle = '#ffd700';
-        bullets.forEach((b, i) => {
-          b.y -= 10;
-          ctx.fillRect(b.x - 3, b.y, 6, 14);
-          if (b.y < 0) bullets.splice(i, 1);
-        });
-
-        // Aliens
-        ctx.fillStyle = '#ff0055';
-        aliens.forEach(al => {
-          al.y += 1.5;
-          ctx.fillRect(al.x - 20, al.y, 40, 30);
-
-          bullets.forEach((b, bi) => {
-            if (Math.abs(b.x - al.x) < 25 && Math.abs(b.y - al.y) < 20) {
-              score += 10;
-              al.y = -40;
-              al.x = Math.random() * 280 + 40;
-              bullets.splice(bi, 1);
-              tg.HapticFeedback.impactOccurred('medium');
-            }
-          });
-        });
-
-        // Ship
-        ctx.fillStyle = '#00f0ff';
-        ctx.fillRect(shipX - 20, 330, 40, 30);
-
-        scoreEl.innerText = 'Очко: ' + score;
-      }, 30);
-    }
-
-    // --- 3. TAP STRIKE ---
-    function initTapStrike() {
-      let target = {x: 180, y: 200, r: 30};
-      let score = 0, timer = 30;
-
-      controlPanel.innerHTML = `<div style="color:var(--text-muted); font-size:0.9rem; text-align:center; width:100%;">Ба ҳадафҳои пай дар пай пахш кунед!</div>`;
-
-      canvas.onclick = (e) => {
-        const rect = canvas.getBoundingClientRect();
-        const x = e.clientX - rect.left;
-        const y = e.clientY - rect.top;
-        if (Math.hypot(x - target.x, y - target.y) < target.r + 15) {
-          score += 10;
-          target.x = Math.random() * 260 + 50;
-          target.y = Math.random() * 280 + 60;
-          tg.HapticFeedback.notificationOccurred('success');
+      if (player.isJumping) {
+        player.y += player.vy;
+        player.vy += 0.8;
+        if (player.y >= 300) {
+          player.y = 300;
+          player.isJumping = false;
         }
-      };
+      }
 
-      gameInterval = setInterval(() => {
-        ctx.fillStyle = '#07070f';
-        ctx.fillRect(0, 0, 360, 400);
+      if (Math.random() < 0.035 + (score / 10000)) {
+        spawnObstacle();
+      }
 
-        ctx.fillStyle = '#ff0055';
-        ctx.shadowBlur = 20; ctx.shadowColor = '#ff0055';
-        ctx.beginPath(); ctx.arc(target.x, target.y, target.r, 0, Math.PI * 2); ctx.fill();
-        ctx.shadowBlur = 0;
+      obstacles.forEach((obs, index) => {
+        obs.y += gameSpeed;
 
-        scoreEl.innerText = 'Очко: ' + score;
-      }, 50);
+        if (
+          Math.abs(player.x - obs.x) < 30 &&
+          Math.abs(player.y - obs.y) < 30 &&
+          player.y >= 260
+        ) {
+          isPlaying = false;
+          tg.HapticFeedback.notificationOccurred('error');
+          createParticles(player.x, player.y, '#ff0055');
+          finalScoreEl.innerText = 'Холи ниҳоӣ: ' + score;
+          gameOverScreen.style.display = 'flex';
+        }
+
+        if (obs.y > 400) {
+          obstacles.splice(index, 1);
+        }
+      });
+
+      particles.forEach((p, index) => {
+        p.x += p.vx;
+        p.y += p.vy;
+        p.life--;
+        if (p.life <= 0) particles.splice(index, 1);
+      });
+
+      scoreEl.innerText = 'Хол: ' + score;
     }
+
+    function draw() {
+      ctx.fillStyle = '#020205';
+      ctx.fillRect(0, 0, 348, 380);
+
+      ctx.strokeStyle = 'rgba(0, 243, 255, 0.12)';
+      ctx.lineWidth = 2;
+      ctx.setLineDash([10, 10]);
+      [104, 194].forEach(lx => {
+        ctx.beginPath();
+        ctx.moveTo(lx, 0);
+        ctx.lineTo(lx, 380);
+        ctx.stroke();
+      });
+      ctx.setLineDash([]);
+
+      obstacles.forEach(obs => {
+        ctx.shadowBlur = 15;
+        ctx.shadowColor = '#ff0055';
+        ctx.fillStyle = '#ff0055';
+        ctx.fillRect(obs.x - 20, obs.y, obs.w, obs.h);
+        ctx.shadowBlur = 0;
+      });
+
+      ctx.shadowBlur = 20;
+      ctx.shadowColor = '#00f3ff';
+      ctx.fillStyle = '#00f3ff';
+      ctx.fillRect(player.x - 20, player.y, player.w, player.h);
+      ctx.shadowBlur = 0;
+
+      particles.forEach(p => {
+        ctx.fillStyle = p.color;
+        ctx.fillRect(p.x, p.y, 3, 3);
+      });
+    }
+
+    function loop() {
+      update();
+      draw();
+      if (isPlaying) {
+        gameInterval = requestAnimationFrame(loop);
+      }
+    }
+
+    function restartGame() {
+      obstacles = [];
+      particles = [];
+      score = 0;
+      gameSpeed = 4;
+      player.x = 154;
+      player.targetX = 154;
+      player.y = 300;
+      player.isJumping = false;
+      isPlaying = true;
+      gameOverScreen.style.display = 'none';
+      loop();
+    }
+
+    loop();
   </script>
 </body>
 </html>
