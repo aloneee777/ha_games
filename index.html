@@ -3,261 +3,408 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-  <title>H-A Gaming Hub with Voice</title>
-  <!-- Telegram Web App SDK -->
+  <title>Cyber Nexus Hub Pro</title>
   <script src="https://telegram.org/js/telegram-web-app.js"></script>
   <style>
-    * { box-sizing: border-box; touch-action: manipulation; }
-    body {
-      background-color: #0f0f1a;
-      color: white;
-      font-family: Arial, sans-serif;
-      text-align: center;
-      margin: 0;
-      padding: 15px;
-      user-select: none;
-    }
-    h1 { color: #00d2ff; margin: 10px 0 5px; }
-    p { color: #aaa; margin-bottom: 15px; font-size: 0.9rem; }
-    
-    /* VOICE CHAT PANEL */
-    .voice-panel {
-      background: #1e1e2f;
-      border: 1px solid #00d2ff;
-      padding: 10px;
-      border-radius: 12px;
-      margin-bottom: 15px;
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-    }
-    .voice-btn {
-      background: #00d2ff;
-      color: #000;
-      border: none;
-      padding: 8px 14px;
-      border-radius: 8px;
-      font-weight: bold;
-      cursor: pointer;
-    }
-    .voice-btn.active {
-      background: #ff0055;
-      color: #fff;
+    :root {
+      --bg-primary: #07070f;
+      --bg-card: rgba(20, 20, 35, 0.75);
+      --accent-neon: #00f0ff;
+      --accent-pink: #ff0055;
+      --accent-gold: #ffd700;
+      --text-main: #ffffff;
+      --text-muted: #8c8cbe;
     }
 
-    .grid {
+    * { box-sizing: border-box; touch-action: manipulation; }
+    
+    body {
+      background: radial-gradient(circle at center, #121026 0%, var(--bg-primary) 100%);
+      color: var(--text-main);
+      font-family: 'Segoe UI', Roboto, Helvetica, sans-serif;
+      margin: 0;
+      padding: 16px;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      user-select: none;
+    }
+
+    header {
+      width: 100%;
+      max-width: 400px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid rgba(0, 240, 255, 0.2);
+      padding-bottom: 12px;
+    }
+
+    .logo {
+      font-size: 1.2rem;
+      font-weight: 800;
+      letter-spacing: 1px;
+      color: var(--accent-neon);
+      text-shadow: 0 0 10px rgba(0, 240, 255, 0.4);
+    }
+
+    .user-stats {
+      font-size: 0.8rem;
+      background: rgba(0, 240, 255, 0.1);
+      border: 1px solid rgba(0, 240, 255, 0.3);
+      padding: 6px 12px;
+      border-radius: 20px;
+      color: var(--accent-neon);
+    }
+
+    /* HUB MENU */
+    #menu-screen {
+      width: 100%;
+      max-width: 400px;
+    }
+
+    .section-title {
+      font-size: 0.85rem;
+      text-transform: uppercase;
+      letter-spacing: 1.5px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+    }
+
+    .games-grid {
       display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 12px;
-      max-width: 360px;
-      margin: 0 auto;
+      grid-template-columns: 1fr;
+      gap: 14px;
     }
-    .card {
-      background: #1e1e2f;
-      padding: 15px 10px;
-      border-radius: 15px;
-      border: 1px solid #333;
+
+    .game-card {
+      background: var(--bg-card);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      border-radius: 16px;
+      padding: 16px;
+      display: flex;
+      align-items: center;
       cursor: pointer;
-      box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
     }
-    .card:active { transform: scale(0.96); }
-    .card h3 { margin: 8px 0 0 0; font-size: 0.95rem; color: #fff; }
-    .icon { font-size: 2.2rem; }
-    .full-width { grid-column: span 2; }
-    
-    .game-screen { display: none; }
-    canvas { background: #111; border-radius: 10px; margin-top: 10px; border: 2px solid #333; }
-    
+
+    .game-card::before {
+      content: '';
+      position: absolute;
+      top: 0; left: 0; width: 4px; height: 100%;
+      background: var(--accent-neon);
+      opacity: 0.6;
+    }
+
+    .game-card:nth-child(2)::before { background: var(--accent-pink); }
+    .game-card:nth-child(3)::before { background: var(--accent-gold); }
+
+    .game-card:active {
+      transform: scale(0.97);
+      border-color: var(--accent-neon);
+    }
+
+    .game-icon {
+      font-size: 2.2rem;
+      margin-right: 16px;
+      background: rgba(255,255,255,0.05);
+      width: 56px; height: 56px;
+      display: flex; align-items: center; justify-content: center;
+      border-radius: 12px;
+    }
+
+    .game-info h3 { margin: 0 0 4px 0; font-size: 1.05rem; }
+    .game-info p { margin: 0; font-size: 0.78rem; color: var(--text-muted); }
+
+    /* GAME SCREEN */
+    #game-screen {
+      display: none;
+      width: 100%;
+      max-width: 400px;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .game-header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 10px;
+    }
+
     .btn-back {
-      padding: 10px 20px;
-      background: #ff0055;
+      background: rgba(255, 255, 255, 0.08);
+      border: 1px solid rgba(255, 255, 255, 0.2);
       color: #fff;
-      border: none;
-      border-radius: 8px;
-      font-size: 0.9rem;
-      margin-top: 15px;
+      padding: 8px 16px;
+      border-radius: 10px;
+      font-size: 0.85rem;
+      font-weight: 600;
       cursor: pointer;
+    }
+
+    .score-board {
+      font-size: 0.95rem;
+      font-weight: bold;
+      color: var(--accent-gold);
+    }
+
+    canvas {
+      background: #030308;
+      border-radius: 16px;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.8);
+      width: 100%;
+      max-width: 360px;
+      height: 400px;
+    }
+
+    .controls {
+      display: flex;
+      gap: 12px;
+      margin-top: 16px;
+      width: 100%;
+      max-width: 360px;
+    }
+
+    .ctrl-btn {
+      flex: 1;
+      background: rgba(20, 20, 35, 0.9);
+      border: 1px solid var(--accent-neon);
+      color: var(--accent-neon);
+      padding: 16px;
+      border-radius: 14px;
+      font-size: 1.2rem;
+      font-weight: bold;
+      cursor: pointer;
+      box-shadow: 0 4px 15px rgba(0, 240, 255, 0.15);
+      transition: 0.1s;
+    }
+
+    .ctrl-btn:active {
+      background: var(--accent-neon);
+      color: #000;
+      transform: scale(0.95);
     }
   </style>
 </head>
 <body>
 
+  <header>
+    <div class="logo">⚡ CYBER NEXUS</div>
+    <div class="user-stats" id="total-score">Рекорд: 0</div>
+  </header>
+
   <!-- MENU -->
-  <div id="menu">
-    <h1>H-A Gaming Hub</h1>
-    <p>Бозӣ интихоб кун ва бо рафиқон гап зан:</p>
+  <div id="menu-screen">
+    <div class="section-title">Интихоби бозӣ</div>
+    <div class="games-grid">
+      <div class="game-card" onclick="launchGame('neon-rider')">
+        <div class="game-icon">🏎️</div>
+        <div class="game-info">
+          <h3>Neon Rider</h3>
+          <p>Роҳи оҳани бо суръати баланд ва монеаҳо</p>
+        </div>
+      </div>
 
-    <!-- VOICE PANEL -->
-    <div class="voice-panel">
-      <div style="text-align: left;">
-        <div style="font-weight: bold; font-size: 0.9rem;">🎙️ Овози мустақим</div>
-        <div id="voice-status" style="font-size: 0.75rem; color: #aaa;">Хомӯш аст</div>
+      <div class="game-card" onclick="launchGame('cyber-shooter')">
+        <div class="game-icon">🚀</div>
+        <div class="game-info">
+          <h3>Cyber Shooter</h3>
+          <p>Нобудсозии душманони фазоӣ бо лазер</p>
+        </div>
       </div>
-      <button id="v-btn" class="voice-btn" onclick="toggleVoice()">Пайваст шудан</button>
-    </div>
 
-    <div class="grid">
-      <div class="card" onclick="startRacing()">
-        <div class="icon">🏎️</div>
-        <h3>2D Racing</h3>
-      </div>
-      <div class="card" onclick="startShooter()">
-        <div class="icon">🚀</div>
-        <h3>2D Shooter</h3>
-      </div>
-      <div class="card" onclick="startFootball()">
-        <div class="icon">⚽</div>
-        <h3>1v1 Football</h3>
-      </div>
-      <div class="card" onclick="startPuzzle()">
-        <div class="icon">🔩</div>
-        <h3>Screw Puzzle</h3>
-      </div>
-      <div class="card full-width" onclick="startMaze()">
-        <div class="icon">↗️</div>
-        <h3>Arrow Maze</h3>
+      <div class="game-card" onclick="launchGame('tap-strike')">
+        <div class="game-icon">🎯</div>
+        <div class="game-info">
+          <h3>Tap Strike</h3>
+          <p>Бозии реаксия ва ҳадафгирии босуръат</p>
+        </div>
       </div>
     </div>
   </div>
 
-  <!-- GAME DISPLAY -->
-  <div id="game-container" class="game-screen">
-    <h2 id="game-title" style="margin:5px 0;">Бозӣ</h2>
-    <div id="score" style="color:#00d2ff; font-weight:bold;">Очко: 0</div>
-    <canvas id="canvas" width="280" height="320"></canvas>
-    <br>
-    <button class="btn-back" onclick="showMenu()">← Баргаштан ба меню</button>
+  <!-- GAME INTERFACE -->
+  <div id="game-screen">
+    <div class="game-header">
+      <button class="btn-back" onclick="returnToMenu()">← Меню</button>
+      <div class="score-board" id="current-score">Очко: 0</div>
+    </div>
+    <canvas id="gameCanvas" width="360" height="400"></canvas>
+    <div class="controls" id="control-panel"></div>
   </div>
 
   <script>
-    // Telegram WebApp init
-    let tg = window.Telegram.WebApp;
+    const tg = window.Telegram.WebApp;
     tg.expand();
 
-    const menu = document.getElementById('menu');
-    const container = document.getElementById('game-container');
-    const canvas = document.getElementById('canvas');
+    const menuScreen = document.getElementById('menu-screen');
+    const gameScreen = document.getElementById('game-screen');
+    const canvas = document.getElementById('gameCanvas');
     const ctx = canvas.getContext('2d');
-    const title = document.getElementById('game-title');
-    const scoreEl = document.getElementById('score');
-    let gameLoop = null;
-    let localStream = null;
-    let isVoiceActive = false;
+    const scoreEl = document.getElementById('current-score');
+    const totalScoreEl = document.getElementById('total-score');
+    const controlPanel = document.getElementById('control-panel');
 
-    // VOICE CHAT FUNCTIONALITY
-    async function toggleVoice() {
-      const vBtn = document.getElementById('v-btn');
-      const vStatus = document.getElementById('voice-status');
+    let gameInterval = null;
+    let maxRecord = 0;
 
-      if (!isVoiceActive) {
-        try {
-          // Дархости иҷозати микрофон аз телефони корбар
-          localStream = await navigator.mediaDevices.getUserMedia({ audio: true, video: false });
-          isVoiceActive = true;
-          vBtn.innerText = "Қатъ кардан";
-          vBtn.classList.add('active');
-          vStatus.innerText = "Микрофон фаъол аст (Пашида истодааст)";
-          tg.HapticFeedback.notificationOccurred('success');
-        } catch (err) {
-          alert('Хатогӣ дар пайваст кардани микрофон: ' + err.message);
-        }
-      } else {
-        if (localStream) {
-          localStream.getTracks().forEach(track => track.stop());
-        }
-        isVoiceActive = false;
-        vBtn.innerText = "Пайваст шудан";
-        vBtn.classList.remove('active');
-        vStatus.innerText = "Хомӯш аст";
-        tg.HapticFeedback.notificationOccurred('warning');
-      }
+    function returnToMenu() {
+      if (gameInterval) clearInterval(gameInterval);
+      gameScreen.style.display = 'none';
+      menuScreen.style.display = 'block';
+      controlPanel.innerHTML = '';
     }
 
-    function showMenu() {
-      if (gameLoop) clearInterval(gameLoop);
-      container.style.display = 'none';
-      menu.style.display = 'block';
-      ctx.clearRect(0, 0, canvas.width, canvas.height);
+    function launchGame(type) {
+      menuScreen.style.display = 'none';
+      gameScreen.style.display = 'flex';
+      if (type === 'neon-rider') initNeonRider();
+      if (type === 'cyber-shooter') initCyberShooter();
+      if (type === 'tap-strike') initTapStrike();
     }
 
-    function prepareGame(name) {
-      if (gameLoop) clearInterval(gameLoop);
-      menu.style.display = 'none';
-      container.style.display = 'block';
-      title.innerText = name;
-    }
+    // --- 1. NEON RIDER (Racing) ---
+    function initNeonRider() {
+      let carX = 160, roadOffset = 0, score = 0;
+      let obstacles = [{x: 120, y: -100, w: 40, h: 60}];
 
-    // 1. 2D Racing
-    function startRacing() {
-      prepareGame('🏎️ 2D Racing');
-      let carX = 120, score = 0;
-      canvas.onclick = (e) => {
-        let rect = canvas.getBoundingClientRect();
-        let x = e.clientX - rect.left;
-        carX = x < 140 ? 70 : 190;
-      };
-      gameLoop = setInterval(() => {
-        score += 1;
+      controlPanel.innerHTML = `
+        <button class="ctrl-btn" onclick="carX = 90">◀ ÇАП</button>
+        <button class="ctrl-btn" onclick="carX = 230">РОСТ ▶</button>
+      `;
+
+      gameInterval = setInterval(() => {
+        score++;
+        roadOffset = (roadOffset + 6) % 40;
+        
+        ctx.fillStyle = '#07070f';
+        ctx.fillRect(0, 0, 360, 400);
+
+        // Road
+        ctx.fillStyle = '#111122';
+        ctx.fillRect(60, 0, 240, 400);
+        ctx.strokeStyle = '#00f0ff';
+        ctx.lineWidth = 2;
+        ctx.setLineDash([20, 20]);
+        ctx.lineDashOffset = -roadOffset;
+        ctx.beginPath(); ctx.moveTo(180, 0); ctx.lineTo(180, 400); ctx.stroke();
+        ctx.setLineDash([]);
+
+        // Obstacle
+        obstacles.forEach(obs => {
+          obs.y += 6;
+          if (obs.y > 400) {
+            obs.y = -80;
+            obs.x = Math.random() > 0.5 ? 90 : 230;
+          }
+          ctx.fillStyle = '#ff0055';
+          ctx.shadowBlur = 15; ctx.shadowColor = '#ff0055';
+          ctx.fillRect(obs.x, obs.y, 40, 60);
+          ctx.shadowBlur = 0;
+
+          // Collision
+          if (obs.y + 60 > 300 && obs.y < 360 && Math.abs(obs.x - carX) < 30) {
+            score = 0;
+            tg.HapticFeedback.notificationOccurred('error');
+          }
+        });
+
+        // Car
+        ctx.fillStyle = '#00f0ff';
+        ctx.shadowBlur = 15; ctx.shadowColor = '#00f0ff';
+        ctx.fillRect(carX - 20, 300, 40, 60);
+        ctx.shadowBlur = 0;
+
         scoreEl.innerText = 'Масофа: ' + score;
-        ctx.fillStyle = '#111';
-        ctx.fillRect(0, 0, 280, 320);
-        ctx.fillStyle = '#00d2ff';
-        ctx.fillRect(carX, 240, 40, 60);
+        if(score > maxRecord) { maxRecord = score; totalScoreEl.innerText = 'Рекорд: ' + maxRecord; }
       }, 30);
     }
 
-    // 2. 2D Shooter
-    function startShooter() {
-      prepareGame('🚀 2D Shooter');
-      let score = 0;
-      canvas.onclick = () => { score += 10; tg.HapticFeedback.impactOccurred('medium'); };
-      gameLoop = setInterval(() => {
-        scoreEl.innerText = 'Очко: ' + score;
-        ctx.fillStyle = '#050510';
-        ctx.fillRect(0, 0, 280, 320);
+    // --- 2. CYBER SHOOTER ---
+    function initCyberShooter() {
+      let shipX = 160, bullets = [], aliens = [{x: 160, y: 30}], score = 0;
+
+      controlPanel.innerHTML = `
+        <button class="ctrl-btn" onclick="if(shipX > 40) shipX -= 30">◀</button>
+        <button class="ctrl-btn" onclick="bullets.push({x: shipX, y: 320})">🔥 ОТАШ</button>
+        <button class="ctrl-btn" onclick="if(shipX < 320) shipX += 30">▶</button>
+      `;
+
+      gameInterval = setInterval(() => {
+        ctx.fillStyle = '#030308';
+        ctx.fillRect(0, 0, 360, 400);
+
+        // Bullets
+        ctx.fillStyle = '#ffd700';
+        bullets.forEach((b, i) => {
+          b.y -= 10;
+          ctx.fillRect(b.x - 3, b.y, 6, 14);
+          if (b.y < 0) bullets.splice(i, 1);
+        });
+
+        // Aliens
         ctx.fillStyle = '#ff0055';
-        ctx.fillRect(120, 50, 40, 40);
-        ctx.fillStyle = '#00d2ff';
-        ctx.fillRect(130, 270, 20, 20);
+        aliens.forEach(al => {
+          al.y += 1.5;
+          ctx.fillRect(al.x - 20, al.y, 40, 30);
+
+          bullets.forEach((b, bi) => {
+            if (Math.abs(b.x - al.x) < 25 && Math.abs(b.y - al.y) < 20) {
+              score += 10;
+              al.y = -40;
+              al.x = Math.random() * 280 + 40;
+              bullets.splice(bi, 1);
+              tg.HapticFeedback.impactOccurred('medium');
+            }
+          });
+        });
+
+        // Ship
+        ctx.fillStyle = '#00f0ff';
+        ctx.fillRect(shipX - 20, 330, 40, 30);
+
+        scoreEl.innerText = 'Очко: ' + score;
       }, 30);
     }
 
-    // 3. 1v1 Football
-    function startFootball() {
-      prepareGame('⚽ 1v1 Football');
-      let ballX = 140, ballY = 160, time = 60;
-      gameLoop = setInterval(() => {
-        if(time > 0) time--;
-        scoreEl.innerText = 'Вақт: ' + time + 'с';
-        ctx.fillStyle = '#1e7e34';
-        ctx.fillRect(0, 0, 280, 320);
-        ctx.fillStyle = '#fff';
-        ctx.beginPath();
-        ctx.arc(ballX, ballY, 10, 0, Math.PI*2);
-        ctx.fill();
-      }, 1000);
-    }
+    // --- 3. TAP STRIKE ---
+    function initTapStrike() {
+      let target = {x: 180, y: 200, r: 30};
+      let score = 0, timer = 30;
 
-    // 4. Screw Puzzle
-    function startPuzzle() {
-      prepareGame('🔩 Screw Puzzle');
-      scoreEl.innerText = 'Пазлҳо: 0/5';
-      ctx.fillStyle = '#222';
-      ctx.fillRect(0,0,280,320);
-      ctx.fillStyle = '#ffcc00';
-      ctx.font = '15px Arial';
-      ctx.fillText('Гайкаҳоро кушоед...', 60, 160);
-    }
+      controlPanel.innerHTML = `<div style="color:var(--text-muted); font-size:0.9rem; text-align:center; width:100%;">Ба ҳадафҳои пай дар пай пахш кунед!</div>`;
 
-    // 5. Arrow Maze
-    function startMaze() {
-      prepareGame('↗️ Arrow Maze');
-      scoreEl.innerText = 'Сатҳ: 1';
-      ctx.fillStyle = '#222';
-      ctx.fillRect(0,0,280,320);
-      ctx.fillStyle = '#00ffcc';
-      ctx.font = '15px Arial';
-      ctx.fillText('Лабиринти стрелкаҳо...', 55, 160);
+      canvas.onclick = (e) => {
+        const rect = canvas.getBoundingClientRect();
+        const x = e.clientX - rect.left;
+        const y = e.clientY - rect.top;
+        if (Math.hypot(x - target.x, y - target.y) < target.r + 15) {
+          score += 10;
+          target.x = Math.random() * 260 + 50;
+          target.y = Math.random() * 280 + 60;
+          tg.HapticFeedback.notificationOccurred('success');
+        }
+      };
+
+      gameInterval = setInterval(() => {
+        ctx.fillStyle = '#07070f';
+        ctx.fillRect(0, 0, 360, 400);
+
+        ctx.fillStyle = '#ff0055';
+        ctx.shadowBlur = 20; ctx.shadowColor = '#ff0055';
+        ctx.beginPath(); ctx.arc(target.x, target.y, target.r, 0, Math.PI * 2); ctx.fill();
+        ctx.shadowBlur = 0;
+
+        scoreEl.innerText = 'Очко: ' + score;
+      }, 50);
     }
   </script>
 </body>
