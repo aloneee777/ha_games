@@ -1,52 +1,100 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="tg">
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>H-A Gaming Hub</title>
-  <script src="https://telegram.org/js/telegram-web-app.js"></script>
+  <title>H-A Game</title>
   <style>
     body {
+      background-color: #121212;
+      color: white;
+      font-family: sans-serif;
+      text-align: center;
       margin: 0;
-      padding: 0;
-      background: #0d0e15;
-      color: #fff;
-      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      padding: 20px;
+    }
+    h1 { color: #00d2ff; }
+    #board {
+      display: grid;
+      grid-template-columns: repeat(3, 90px);
+      grid-template-rows: repeat(3, 90px);
+      gap: 10px;
+      justify-content: center;
+      margin: 20px auto;
+    }
+    .cell {
+      background: #1e1e2f;
+      border-radius: 12px;
+      font-size: 2.5rem;
       display: flex;
-      flex-direction: column;
       align-items: center;
       justify-content: center;
-      min-height: 100vh;
+      cursor: pointer;
+      color: #00d2ff;
+      height: 90px;
     }
-    .splash {
-      text-align: center;
-    }
-    .logo {
-      font-size: 50px;
-      font-weight: 900;
-      letter-spacing: 4px;
-      background: linear-gradient(135deg, #00f2fe, #4facfe);
-      -webkit-background-clip: text;
-      -webkit-text-fill-color: transparent;
-      text-shadow: 0 0 20px rgba(79, 172, 254, 0.6);
-    }
-    .btn {
-      margin-top: 30px;
-      padding: 12px 30px;
-      font-size: 18px;
-      color: #fff;
-      background: linear-gradient(135deg, #7F00FF, #E100FF);
+    button {
+      padding: 12px 24px;
+      background: #9d4edf;
       border: none;
-      border-radius: 25px;
-      box-shadow: 0 0 15px rgba(225, 0, 255, 0.5);
+      color: white;
+      font-size: 1rem;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 15px;
     }
   </style>
 </head>
 <body>
-  <div class="splash">
-    <div class="logo">H-A</div>
-    <p>Ultimate Mini Games Hub</p>
-    <button class="btn">Play Games</button>
+  <h1>H-A Gaming Hub</h1>
+  <p id="status">Навбати: X</p>
+  <div id="board">
+    <div class="cell" onclick="makeMove(this, 0)"></div>
+    <div class="cell" onclick="makeMove(this, 1)"></div>
+    <div class="cell" onclick="makeMove(this, 2)"></div>
+    <div class="cell" onclick="makeMove(this, 3)"></div>
+    <div class="cell" onclick="makeMove(this, 4)"></div>
+    <div class="cell" onclick="makeMove(this, 5)"></div>
+    <div class="cell" onclick="makeMove(this, 6)"></div>
+    <div class="cell" onclick="makeMove(this, 7)"></div>
+    <div class="cell" onclick="makeMove(this, 8)"></div>
   </div>
+  <button onclick="resetGame()">Аз нав оғоз кардан</button>
+
+  <script>
+    let turn = 'X';
+    let state = Array(9).fill(null);
+    let active = true;
+
+    function makeMove(cell, idx) {
+      if (!state[idx] && active) {
+        state[idx] = turn;
+        cell.innerText = turn;
+        cell.style.color = turn === 'X' ? '#00d2ff' : '#ff007f';
+        if (checkWin()) {
+          document.getElementById('status').innerText = 'Ғолиб: ' + turn + '! 🎉';
+          active = false;
+        } else if (state.every(c => c)) {
+          document.getElementById('status').innerText = 'Дӯстӣ! 🤝';
+        } else {
+          turn = turn === 'X' ? 'O' : 'X';
+          document.getElementById('status').innerText = 'Навбати: ' + turn;
+        }
+      }
+    }
+
+    function checkWin() {
+      const wins = [[0,1,2],[3,4,5],[6,7,8],[0,3,6],[1,4,7],[2,5,8],[0,4,8],[2,4,6]];
+      return wins.some(w => w.every(i => state[i] === turn));
+    }
+
+    function resetGame() {
+      state.fill(null);
+      active = true;
+      turn = 'X';
+      document.getElementById('status').innerText = 'Навбати: X';
+      document.querySelectorAll('.cell').forEach(c => c.innerText = '');
+    }
+  </script>
 </body>
 </html>
